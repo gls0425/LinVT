@@ -5,7 +5,7 @@ Lishuai Gao, Yujie Zhong, Yingsen Zeng, Haoxian Tan, Dengjie Li, and Zheng Zhao
 [2024/11/28] 🔥 Our paper is coming out soon!
 
 <p align="center">
- <img src="imgs/fig2-network.jpg" width="100%">
+ <img src="network.jpg" width="100%">
 </p>
 
 ## 📖 Abstract
