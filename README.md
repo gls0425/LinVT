@@ -2,7 +2,7 @@
 Lishuai Gao, Yujie Zhong, Yingsen Zeng, Haoxian Tan, Dengjie Li, and Zheng Zhao
 
 ## News
-[2024/11/28] 🔥 Our paper is coming out soon!
+[2024/12/04] 🔥 Our paper is coming out soon!
 
 <p align="center">
  <img src="network.jpg" width="100%">
