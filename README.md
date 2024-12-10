@@ -1,5 +1,4 @@
 # LinVT: Empower Your Image-level Large Language Model to Understand Videos
-Lishuai Gao, Yujie Zhong, Yingsen Zeng, Haoxian Tan, Dengjie Li, and Zheng Zhao
 
 ## News
 [2024/12/09] 🔥 Our paper is coming! We release our paper on [Arxiv](https://arxiv.org/abs/2412.05185). Please refer to the paper for more details. 
