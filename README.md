@@ -24,4 +24,4 @@ pip install -r requirements.txt
 ```
 
 ## Model Training
-TODO.
+comming soon.
