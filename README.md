@@ -4,7 +4,7 @@
 [2024/12/09] 🔥 Our paper is coming! We release our paper on [Arxiv](https://arxiv.org/abs/2412.05185). Please refer to the paper for more details. 
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-activitynet)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-activitynet?p=linvt-empower-your-image-level-large-language)
-
+The other ranking lists are coming soon.
 
 <p align="center">
  <img src="docs/network.jpg" width="100%">
