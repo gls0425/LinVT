@@ -1,0 +1,51 @@
+## 表示作业的基本信息，自动填充，请勿修改
+[base]
+type = ml-vision
+[resource]
+usergroup = hadoop-vacv
+queue = root.zw05_training_cluster.hadoop-vision.job
+[roles]
+workers = 1
+worker.memory = 100000
+worker.vcore = 20
+worker.gcores80g = 1
+worker.ports = 1
+## worker启动后执行的脚本，一般为训练作业的执行命令
+worker.script = bash test.sh
+[user_args]
+[am]
+afo.app.am.resource.mb = 4096
+[tensorboard]
+with.tensor.board = false
+[docker]
+afo.docker.image.name = registryonline-hulk.sankuai.com/custom_prod/com.sankuai.data.hadoop.gpu/data-pt1.13.1-py39-nccl2.14-cuda11.7-flashatten2.1.1-93a326cb
+## 是否使用预拉取
+[data]
+afo.data.prefetch=false
+## 是否支持容错
+[failover]
+afo.app.support.engine.failover=true
+## conda环境上传
+[conda]
+afo.conda.env.name = gxx6
+afo.conda.env.path = viewfs://hadoop-meituan/zw03mlnn01/user/conda/chenshaoxiang/conda_envs/gxx6.tar.gz
+afo.conda.store.type = hdfs
+[job_track]
+demand_id = 3012
+[others]
+## pytorch dataloader可能会用到共享内存，配置需要的共享内存（单位为B）
+afo.app.env.YARN_CONTAINER_RUNTIME_DOCKER_SHM_SIZE_BYTES = 400000000000
+## 作业结束后，会通过大象通知用户
+afo.xm.notice.receivers.account= chenshaoxiang
+## 若配置true，则会安装.hope文件同路径下requirements.txt中配置的依赖
+with_requirements = false
+## 作业排队时间上限，单位秒
+afo.app.yarn.allocate.timeout.seconds = 14400000
+afo.role.worker.env.YARN_CONTAINER_RUNTIME_DOCKER_CEPH_ENABLE=false
+afo.role.worker.env.YARN_CONTAINER_RUNTIME_NOT_MOUNT_HOST_CEPH=true
+afo.role.worker.not.node_name = zw04-data-hdp-dn-a100-gpu0054.mt,zw04-data-hdp-dn-a100-gpu0079.mt,zw04-data-hdp-dn-a100-gpu0098.mt
+afo.dolphinfs.otherusers = hadoop-basecv,hadoop-vacv
+pc.use.dolphinfs.users = hadoop-basecv,hadoop-vacv
+afo.role.worker.env.INIT_SCRIPT_SSHD_ENABLED=true
+afo.role.worker.env.INIT_SCRIPT_SSHD_PROT=22
+afo.role.worker.env.INIT_SCRIPT_SSHD_PASSWORD=abc123

@@ -1,0 +1,42 @@
+[roles]
+workers = 8
+worker.gcores80g = 8
+worker.memory = 800000
+worker.vcore = 80
+worker.ports = 1
+worker.script = cat train_multi_node.sh && bash train_multi_node.sh run
+[base]
+type = ml-vision
+[resource]
+usergroup = hadoop-vacv
+queue = root.zw05_training_cluster.hadoop-vision.mllm_pretrain
+[user_args]
+[am]
+afo.app.am.resource.mb = 4096
+[tensorboard]
+with.tensor.board = false
+[docker]
+afo.docker.image.name = registryonline-hulk.sankuai.com/custom_prod/com.sankuai.data.hadoop.gpu/data-hadoop-basecv_mllm_deepspeed-c1316971
+[data]
+afo.data.prefetch=false
+[failover]
+afo.app.support.engine.failover=true
+[conda]
+afo.conda.env.name = gxx6
+afo.conda.env.path = viewfs://hadoop-meituan/zw03mlnn01/user/conda/chenshaoxiang/conda_envs/gxx6.tar.gz
+afo.conda.store.type = hdfs
+[job_track]
+demand_id = 3012
+[others]
+afo.app.env.YARN_CONTAINER_RUNTIME_DOCKER_SHM_SIZE_BYTES = 400000000000
+afo.xm.notice.receivers.account= chenshaoxiang
+with_requirements = false
+afo.app.yarn.allocate.timeout.seconds = 14400000
+afo.role.worker.env.YARN_CONTAINER_RUNTIME_DOCKER_CEPH_ENABLE=false
+afo.role.worker.env.YARN_CONTAINER_RUNTIME_NOT_MOUNT_HOST_CEPH=true
+afo.role.worker.not.node_name = zw04-data-k8s-gpu-a100-node1150.mt,zw04-data-hdp-dn-a100-gpu0054.mt,zw04-data-hdp-dn-a100-gpu0079.mt,zw04-data-hdp-dn-a100-gpu0098.mt,zw04-data-k8s-gpu-a100-node0399
+afo.dolphinfs.otherusers = hadoop-basecv,hadoop-vacv
+pc.use.dolphinfs.users = hadoop-basecv,hadoop-vacv
+afo.role.worker.env.INIT_SCRIPT_SSHD_ENABLED=true
+afo.role.worker.env.INIT_SCRIPT_SSHD_PROT=22
+afo.role.worker.env.INIT_SCRIPT_SSHD_PASSWORD=abc123

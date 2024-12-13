@@ -1,0 +1,630 @@
+-------Current repo status-------
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   ../../eval/mvbench/evaluate_mvbench.py
+	modified:   ../../evaluate.sh
+	modified:   ../../internvl/model/internvl_chat/configuration_internvl_chat.py
+	modified:   ../../internvl/model/internvl_chat/modeling_intern_vit.py
+	modified:   ../../internvl/model/internvl_chat/modeling_internvl_chat.py
+	modified:   ../../internvl/train/dataset.py
+	modified:   ../../internvl/train/internvl_chat_finetune.py
+	modified:   ../../shell/internvl2.0/2nd_finetune/internvl2_1b_qwen2_0_5b_dynamic_res_2nd_finetune_lora.sh
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	../../eval/longvideobench/
+	../../internvl/model/internvl_chat/Qformer.py
+	../
+	../../pretrained
+	../../shell/data/internvl_1_2_finetune_custom_video.json
+	../../shell/internvl2.0/2nd_finetune/i
+	../../shell/internvl2.0/2nd_finetune/internvl2_1b_qwen2_0_5b_dynamic_res_2nd_finetune_ffc_lora.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+-------Current changes-------
+diff --git a/internvl_chat/eval/mvbench/evaluate_mvbench.py b/internvl_chat/eval/mvbench/evaluate_mvbench.py
+index fa85b66..56eb9f4 100644
+--- a/internvl_chat/eval/mvbench/evaluate_mvbench.py
++++ b/internvl_chat/eval/mvbench/evaluate_mvbench.py
+@@ -2,6 +2,7 @@ import argparse
+ import itertools
+ import json
+ import os
++import os.path as osp
+ import random
+ import time
+ from functools import partial
+@@ -17,37 +18,39 @@ from PIL import Image
+ from torch.utils.data import Dataset
+ from tqdm import tqdm
+ 
++data_root = '/mnt/dolphinfs/hdd_pool/docker/user/hadoop-basecv/weihaiwan/data/mvbench'
++
+ data_list = {
+-    'Action Sequence': ('action_sequence.json', './data/MVBench/video/star/Charades_v1_480/', 'video', True),
++    'Action Sequence': ('action_sequence.json', osp.join(data_root, 'video/star/Charades_v1_480/'), 'video', True),
+     # has start & end
+-    'Action Prediction': ('action_prediction.json', './data/MVBench/video/star/Charades_v1_480/', 'video', True),
++    'Action Prediction': ('action_prediction.json', osp.join(data_root, 'video/star/Charades_v1_480/'), 'video', True),
+     # has start & end
+-    'Action Antonym': ('action_antonym.json', './data/MVBench/video/ssv2_video/', 'video', False),
++    'Action Antonym': ('action_antonym.json', osp.join(data_root, 'video/ssv2_video/'), 'video', False),
+     'Fine-grained Action': (
+-    'fine_grained_action.json', './data/MVBench/video/Moments_in_Time_Raw/videos/', 'video', False),
+-    'Unexpected Action': ('unexpected_action.json', './data/MVBench/video/FunQA_test/test/', 'video', False),
+-    'Object Existence': ('object_existence.json', './data/MVBench/video/clevrer/video_validation/', 'video', False),
+-    'Object Interaction': ('object_interaction.json', './data/MVBench/video/star/Charades_v1_480/', 'video', True),
++    'fine_grained_action.json', osp.join(data_root, 'video/Moments_in_Time_Raw/videos/'), 'video', False),
++    'Unexpected Action': ('unexpected_action.json', osp.join(data_root, 'video/FunQA_test/test/'), 'video', False),
++    'Object Existence': ('object_existence.json', osp.join(data_root, 'video/clevrer/video_validation/'), 'video', False),
++    'Object Interaction': ('object_interaction.json', osp.join(data_root, 'video/star/Charades_v1_480/'), 'video', True),
+     # has start & end
+-    'Object Shuffle': ('object_shuffle.json', './data/MVBench/video/perception/videos/', 'video', False),
+-    'Moving Direction': ('moving_direction.json', './data/MVBench/video/clevrer/video_validation/', 'video', False),
+-    'Action Localization': ('action_localization.json', './data/MVBench/video/sta/sta_video/', 'video', True),
++    'Object Shuffle': ('object_shuffle.json', osp.join(data_root, 'video/perception/videos/'), 'video', False),
++    'Moving Direction': ('moving_direction.json', osp.join(data_root, 'video/clevrer/video_validation/'), 'video', False),
++    'Action Localization': ('action_localization.json', osp.join(data_root, 'video/sta/sta_video/'), 'video', True),
+     # has start & end
+-    'Scene Transition': ('scene_transition.json', './data/MVBench/video/scene_qa/video/', 'video', False),
+-    'Action Count': ('action_count.json', './data/MVBench/video/perception/videos/', 'video', False),
+-    'Moving Count': ('moving_count.json', './data/MVBench/video/clevrer/video_validation/', 'video', False),
+-    'Moving Attribute': ('moving_attribute.json', './data/MVBench/video/clevrer/video_validation/', 'video', False),
+-    'State Change': ('state_change.json', './data/MVBench/video/perception/videos/', 'video', False),
+-    'Fine-grained Pose': ('fine_grained_pose.json', './data/MVBench/video/nturgbd/', 'video', False),
+-    'Character Order': ('character_order.json', './data/MVBench/video/perception/videos/', 'video', False),
+-    'Egocentric Navigation': ('egocentric_navigation.json', './data/MVBench/video/vlnqa/', 'video', False),
+-    'Episodic Reasoning': ('episodic_reasoning.json', './data/MVBench/video/tvqa/frames_fps3_hq/', 'frame', True),
++    'Scene Transition': ('scene_transition.json', osp.join(data_root, 'video/scene_qa/video/'), 'video', False),
++    'Action Count': ('action_count.json', osp.join(data_root, 'video/perception/videos/'), 'video', False),
++    'Moving Count': ('moving_count.json', osp.join(data_root, 'video/clevrer/video_validation/'), 'video', False),
++    'Moving Attribute': ('moving_attribute.json', osp.join(data_root, 'video/clevrer/video_validation/'), 'video', False),
++    'State Change': ('state_change.json', osp.join(data_root, 'video/perception/videos/'), 'video', False),
++    'Fine-grained Pose': ('fine_grained_pose.json', osp.join(data_root, 'video/nturgbd/'), 'video', False),
++    'Character Order': ('character_order.json', osp.join(data_root, 'video/perception/videos/'), 'video', False),
++    'Egocentric Navigation': ('egocentric_navigation.json', osp.join(data_root, 'video/vlnqa/'), 'video', False),
++    'Episodic Reasoning': ('episodic_reasoning.json', osp.join(data_root, 'video/tvqa/frames_fps3_hq/'), 'frame', True),
+     # has start & end, read frame
+     'Counterfactual Inference': (
+-    'counterfactual_inference.json', './data/MVBench/video/clevrer/video_validation/', 'video', False),
++    'counterfactual_inference.json', osp.join(data_root, 'video/clevrer/video_validation/'), 'video', False),
+ }
+ 
+-data_dir = './data/MVBench/json'
++data_dir = osp.join(data_root, 'json')
+ 
+ 
+ def collate_fn(batches, tokenizer):
+@@ -288,7 +291,7 @@ def evaluate_chat_model():
+     )
+ 
+     outputs = []
+-    for _, (pixel_values, questions, answers, num_patches_lists, task_types) in tqdm(enumerate(dataloader)):
++    for _, (pixel_values, questions, answers, num_patches_lists, task_types) in enumerate(tqdm(dataloader)):
+         pixel_values = pixel_values.to(torch.bfloat16).cuda()
+         generation_config = dict(
+             num_beams=args.num_beams,
+diff --git a/internvl_chat/evaluate.sh b/internvl_chat/evaluate.sh
+index dfdb76b..3a4b1ff 100644
+--- a/internvl_chat/evaluate.sh
++++ b/internvl_chat/evaluate.sh
+@@ -579,5 +579,15 @@ if [ ${DATASET} == "mvbench" ]; then
+       --master_addr=127.0.0.1 \
+       --nproc_per_node=${GPUS} \
+       --master_port=${MASTER_PORT} \
+-      eval/mvbench/evaluate_mvbench.py --checkpoint ${CHECKPOINT} "${ARGS[@]:2}"
++      eval/mvbench/evaluate_mvbench.py --checkpoint ${CHECKPOINT} --out-dir '/mnt/dolphinfs/hdd_pool/docker/user/hadoop-vacv/gaolishuai/results/InternVL2/mvbench' "${ARGS[@]:2}"
++fi
++
++if [ ${DATASET} == 'longvideobench' ]; then
++    torchrun \
++       --nnodes=1 \
++      --node_rank=0 \
++      --master_addr=127.0.0.1 \
++      --nproc_per_node=${GPUS} \
++      --master_port=${MASTER_PORT} \
++      eval/longvideobench/evaluate_longvideobench.py --checkpoint ${CHECKPOINT} --out-dir '/mnt/dolphinfs/hdd_pool/docker/user/hadoop-vacv/gaolishuai/results/InternVL2/longvideobench' "${ARGS[@]:2}"
+ fi
+diff --git a/internvl_chat/internvl/model/internvl_chat/configuration_internvl_chat.py b/internvl_chat/internvl/model/internvl_chat/configuration_internvl_chat.py
+index 8466a16..f540232 100644
+--- a/internvl_chat/internvl/model/internvl_chat/configuration_internvl_chat.py
++++ b/internvl_chat/internvl/model/internvl_chat/configuration_internvl_chat.py
+@@ -37,6 +37,10 @@ class InternVLChatConfig(PretrainedConfig):
+             ps_version='v1',
+             min_dynamic_patch=1,
+             max_dynamic_patch=6,
++            use_video_frames_compress=False,
++            num_video_query_token=32,
++            min_num_frame=90,
++            max_num_frame=120,
+             **kwargs):
+         super().__init__(**kwargs)
+ 
+@@ -72,10 +76,19 @@ class InternVLChatConfig(PretrainedConfig):
+         self.min_dynamic_patch = min_dynamic_patch
+         self.max_dynamic_patch = max_dynamic_patch
+ 
++        self.use_video_frames_compress = use_video_frames_compress
++        self.num_video_query_token = num_video_query_token
++        self.max_frame_pos = 64
++        self.min_num_frame=min_num_frame
++        self.max_num_frame=max_num_frame
++
+         logger.info(f'vision_select_layer: {self.select_layer}')
+         logger.info(f'ps_version: {self.ps_version}')
+         logger.info(f'min_dynamic_patch: {self.min_dynamic_patch}')
+         logger.info(f'max_dynamic_patch: {self.max_dynamic_patch}')
++        logger.info(f'video_min_num_frame: {self.min_num_frame}')
++        logger.info(f'video_max_num_frame: {self.max_num_frame}')
++        logger.info(f'is open compress frames module: {self.use_video_frames_compress}')
+ 
+     def to_dict(self):
+         """
+@@ -100,5 +113,10 @@ class InternVLChatConfig(PretrainedConfig):
+         output['ps_version'] = self.ps_version
+         output['min_dynamic_patch'] = self.min_dynamic_patch
+         output['max_dynamic_patch'] = self.max_dynamic_patch
++        output['use_video_frames_compress'] = self.use_video_frames_compress
++        output['num_video_query_token'] = self.num_video_query_token
++        output['min_num_frame'] = self.min_num_frame
++        output['max_num_frame'] = self.max_num_frame
++        output['max_frame_pos'] = self.max_frame_pos
+ 
+         return output
+diff --git a/internvl_chat/internvl/model/internvl_chat/modeling_intern_vit.py b/internvl_chat/internvl/model/internvl_chat/modeling_intern_vit.py
+index 5d875f4..9e0de11 100644
+--- a/internvl_chat/internvl/model/internvl_chat/modeling_intern_vit.py
++++ b/internvl_chat/internvl/model/internvl_chat/modeling_intern_vit.py
+@@ -341,6 +341,8 @@ class InternVisionModel(PreTrainedModel):
+         else:
+             if len(pixel_values.shape) == 4:
+                 hidden_states = self.embeddings(pixel_values)
++            elif len(pixel_values.shape) == 3:
++                hidden_states = pixel_values
+             else:
+                 raise ValueError(f'wrong pixel_values size: {pixel_values.shape}')
+         encoder_outputs = self.encoder(
+diff --git a/internvl_chat/internvl/model/internvl_chat/modeling_internvl_chat.py b/internvl_chat/internvl/model/internvl_chat/modeling_internvl_chat.py
+index 98009fc..7bd6eb4 100644
+--- a/internvl_chat/internvl/model/internvl_chat/modeling_internvl_chat.py
++++ b/internvl_chat/internvl/model/internvl_chat/modeling_internvl_chat.py
+@@ -5,7 +5,7 @@
+ # --------------------------------------------------------
+ import warnings
+ from typing import Any, List, Optional, Tuple, Union
+-
++import contextlib
+ import torch.distributed as dist
+ import torch.utils.checkpoint
+ import transformers
+@@ -24,6 +24,9 @@ from transformers.utils import ModelOutput, logging
+ from .configuration_internvl_chat import InternVLChatConfig
+ from .modeling_intern_vit import InternVisionModel
+ 
++from .Qformer import BertConfig, BertLMHeadModel
++import einops
++
+ logger = logging.get_logger(__name__)
+ 
+ 
+@@ -62,6 +65,53 @@ class InternVLChatModel(PreTrainedModel):
+             self.vision_model = vision_model
+         else:
+             self.vision_model = InternVisionModel(config.vision_config)
++
++        self.use_video_frames_compress = config.use_video_frames_compress
++        self.num_video_query_token = config.num_video_query_token
++        self.frozen_video_FFC = False
++        if self.use_video_frames_compress:
++            print('-----------------> Loading Video Q-Former', config.max_frame_pos, config.vision_config.hidden_size, \
++                                                               config.llm_config.hidden_size) # 64, 1024, 896
++            logger.info('Loading Video Q-Former')
++            self.video_frame_position_embedding = nn.Embedding(config.max_frame_pos, config.llm_config.hidden_size)
++            self.video_QFormer, self.video_query_tokens = self.init_video_Qformer(num_query_token=self.num_video_query_token, \
++                                                                                  vision_width=config.llm_config.hidden_size, \
++                                                                                  num_hidden_layers=2, num_attention_heads=12)
++
++            logger.info('Loading FFC-LLM projector')
++            self.ffc_proj = nn.Linear(self.video_QFormer.config.hidden_size, config.llm_config.hidden_size)
++            # init projector and position_embedding
++            self.video_frame_position_embedding.weight.data.normal_(mean=0.0, std=0.02)
++            if self.ffc_proj.bias is not None:
++                self.ffc_proj.bias.data.zero_()
++            self.video_QFormer.cls = None
++            self.video_QFormer.bert.embeddings.word_embeddings = None
++            self.video_QFormer.bert.embeddings.position_embeddings = None
++            for layer in self.video_QFormer.bert.encoder.layer:
++                layer.output = None
++                layer.intermediate = None
++
++            if self.frozen_video_FFC:
++                for name, param in self.video_QFormer.named_parameters():
++                    param.requires_grad = False
++                for name, param in self.video_frame_position_embedding().named_parameters():
++                    param.requires_grad = False
++                self.video_query_tokens.requires_grad = False
++                logger.info('Video Q-Former is frozen.')
++                for name, param in self.ffc_proj.named_parameters():
++                    param.requires_grad = False
++                logger.info('Video FFC proj is frozen')
++            else:
++                for name, param in self.video_QFormer.named_parameters():
++                    param.requires_grad = True
++                for name, param in self.video_frame_position_embedding.named_parameters():
++                    param.requires_grad = True
++                self.video_query_tokens.requires_grad = True
++                logger.info('Video Q-Former is not frozen.')
++                for name, param in self.ffc_proj.named_parameters():
++                    param.requires_grad = True
++                logger.info('Video FFC proj is not frozen')
++
+         if language_model is not None:
+             self.language_model = language_model
+         else:
+@@ -100,6 +150,32 @@ class InternVLChatModel(PreTrainedModel):
+         if config.use_llm_lora:
+             self.wrap_llm_lora(r=config.use_llm_lora, lora_alpha=2 * config.use_llm_lora)
+ 
++    def init_video_Qformer(cls, num_query_token, vision_width, num_hidden_layers=2, num_attention_heads=16):
++        encoder_config = BertConfig.from_pretrained("bert-base-uncased")
++        encoder_config.num_hidden_layers = num_hidden_layers
++        encoder_config.encoder_width = vision_width
++        # insert cross-attention layer every other block
++        encoder_config.add_cross_attention = True
++        encoder_config.cross_attention_freq = 1
++        encoder_config.query_length = num_query_token
++        encoder_config.num_attention_heads = num_attention_heads
++        Qformer = BertLMHeadModel(config=encoder_config)
++        query_tokens = nn.Parameter(
++            torch.zeros(1, num_query_token, encoder_config.hidden_size)
++        )
++        query_tokens.data.normal_(mean=0.0, std=encoder_config.initializer_range)
++        return Qformer, query_tokens
++
++    def maybe_autocast(self, dtype=torch.float16):
++        # if on cpu, don't use autocast
++        # if on gpu, use autocast with dtype if provided, otherwise use torch.float16
++        enable_autocast = self.device != torch.device("cpu")
++
++        if enable_autocast:
++            return torch.cuda.amp.autocast(dtype=dtype)
++        else:
++            return contextlib.nullcontext()
++
+     def wrap_backbone_lora(self, r=128, lora_alpha=256, lora_dropout=0.05):
+         lora_config = LoraConfig(
+             r=r,
+@@ -168,8 +244,9 @@ class InternVLChatModel(PreTrainedModel):
+             ignore_flag = False
+         except Exception as e:
+             vit_embeds = vit_embeds.reshape(-1, C)
+-            print(f'warning: {e}, input_embeds[selected].shape={input_embeds[selected].shape}, '
++            print(f'warning: {e}, input_embeds[selected].shape={input_embeds[selected].shape},'
+                   f'vit_embeds.shape={vit_embeds.shape}')
++            print('the warning of shapes: ======>', input_embeds[selected].dtype, vit_embeds.dtype)
+             n_token = selected.sum()
+             input_embeds[selected] = input_embeds[selected] * 0.0 + vit_embeds[:n_token]
+             ignore_flag = True
+@@ -245,10 +322,40 @@ class InternVLChatModel(PreTrainedModel):
+         vit_embeds = vit_embeds[:, 1:, :]
+ 
+         h = w = int(vit_embeds.shape[1] ** 0.5)
++        # vit_embeds shape: b,h,w,c
+         vit_embeds = vit_embeds.reshape(vit_embeds.shape[0], h, w, -1)
+         vit_embeds = self.pixel_shuffle(vit_embeds, scale_factor=self.downsample_ratio)
+         vit_embeds = vit_embeds.reshape(vit_embeds.shape[0], -1, vit_embeds.shape[-1])
++        # vit_embeds_mlp shape: b,tn,tc
+         vit_embeds = self.mlp1(vit_embeds)
++        # add q-former to compress video frames, from N to M.
++        time_length = vit_embeds.shape[0]
++        if self.use_video_frames_compress:
++            with self.maybe_autocast():
++                # add frame_pos embedding
++                position_ids = torch.arange(time_length, dtype=torch.long, device=vit_embeds.device)
++                position_ids = position_ids.unsqueeze(1).expand(-1, vit_embeds.shape[1])
++                frame_position_embeddings = self.video_frame_position_embedding(position_ids)
++                # frame_position_embeddings = frame_position_embeddings.unsqueeze(-2)
++                frame_hidden_state = frame_position_embeddings + vit_embeds
++                # l,tn, tc -> b,l,tn,tc
++                frame_hidden_state = frame_hidden_state.unsqueeze(0)
++                # frame attention
++                frame_hidden_state = einops.rearrange(frame_hidden_state, 'b t q h -> b (t q) h', b=1, t=time_length)
++                frame_atts = torch.ones(frame_hidden_state.size()[:-1], dtype=torch.long).to(vit_embeds.device)
++                qvt_b, qvt_ml, qvt_c = self.video_query_tokens.shape
++                qvt_n = vit_embeds.shape[1]
++                query_video_tokens = self.video_query_tokens[None,...].expand(-1, vit_embeds.shape[1], -1,-1).reshape(qvt_b, qvt_ml*qvt_n, qvt_c)
++                # query_video_tokens = self.video_query_tokens.expand(-1, vit_embeds.shape[1], -1)
++                query_video_output = self.video_QFormer.bert(
++                    query_embeds=query_video_tokens, #[fixed_len, num_token, llm_config.hidden_size]
++                    encoder_hidden_states=frame_hidden_state,
++                    encoder_attention_mask=frame_atts,
++                    return_dict=True,
++                )
++                vit_embeds = query_video_output.last_hidden_state
++                vit_embeds = einops.rearrange(vit_embeds, 'b (t q) h -> b t q h',t=qvt_ml,q=qvt_n).squeeze(0)
++                vit_embeds = self.ffc_proj(vit_embeds).to(torch.bfloat16)
+         return vit_embeds
+ 
+     def batch_chat(self, tokenizer, pixel_values, questions, generation_config, num_patches_list=None,
+@@ -301,7 +408,7 @@ class InternVLChatModel(PreTrainedModel):
+         return responses
+ 
+     def chat(self, tokenizer, pixel_values, question, generation_config, history=None, return_history=False,
+-             num_patches_list=None, IMG_START_TOKEN='<img>', IMG_END_TOKEN='</img>', IMG_CONTEXT_TOKEN='<IMG_CONTEXT>',
++             num_patches_list=None, num_video_query_token=0, IMG_START_TOKEN='<img>', IMG_END_TOKEN='</img>', IMG_CONTEXT_TOKEN='<IMG_CONTEXT>',
+              verbose=False):
+ 
+         if history is None and pixel_values is not None and '<image>' not in question:
+@@ -330,6 +437,8 @@ class InternVLChatModel(PreTrainedModel):
+             image_bs = pixel_values.shape[0]
+             print(f'dynamic ViT batch size: {image_bs}')
+ 
++        if num_video_query_token > 0:
++            num_patches_list = [num_video_query_token]
+         for num_patches in num_patches_list:
+             image_tokens = IMG_START_TOKEN + IMG_CONTEXT_TOKEN * self.num_image_token * num_patches + IMG_END_TOKEN
+             query = query.replace('<image>', image_tokens, 1)
+diff --git a/internvl_chat/internvl/train/dataset.py b/internvl_chat/internvl/train/dataset.py
+index 0fedaa2..2f390ce 100644
+--- a/internvl_chat/internvl/train/dataset.py
++++ b/internvl_chat/internvl/train/dataset.py
+@@ -1,4 +1,5 @@
+ import io
++import pickle
+ 
+ from transformers.trainer_pt_utils import LabelSmoother
+ 
+@@ -96,9 +97,13 @@ def read_frames_gif(
+             frames.append(frame)
+     return frames
+ 
++def read_frames_pickle(video_path, num_frames, sample='rand', fix_start=None, client=None, min_num_frames=4):
++    video_info = pickle.load(open(video_path, 'rb'))
++    image_feats = video_info['feats'][:, 1:]
++    return image_feats
+ 
+ def read_frames_decord(
+-        video_path, num_frames, sample='rand', fix_start=None,
++        video_path, max_num_frames, sample='rand', fix_start=None,
+         client=None, clip=None, min_num_frames=4
+ ):
+     if 's3://' in video_path:
+@@ -116,7 +121,7 @@ def read_frames_decord(
+         start_index = int(start * fps)
+ 
+     # t_num_frames = min(max(int(duration * sample_fps), min_num_frames), num_frames)
+-    t_num_frames = np.random.randint(min_num_frames, num_frames + 1)
++    t_num_frames = np.random.randint(min_num_frames, max_num_frames + 1)
+ 
+     frame_indices = get_frame_indices(
+         t_num_frames, vlen, sample=sample, fix_start=fix_start,
+@@ -200,10 +205,11 @@ class TCSLoader(object):
+         print('--> after Client(conf_path)')
+ 
+     def __call__(self, fn, image_type='image', max_num_frames=-1, min_num_frames=4, sample='rand', clip=None):
++        is_feat = False
+         if image_type == 'image':
+             img_value_str = self.client.get(fn)
+             img = pil_loader(img_value_str)
+-            return img
++            return img, is_feat
+ 
+         elif image_type == 'video':
+             if fn.endswith('/'):
+@@ -212,10 +218,14 @@ class TCSLoader(object):
+             elif fn.endswith('.gif'):
+                 frames = read_frames_gif(fn, num_frames=max_num_frames, min_num_frames=min_num_frames,
+                                          client=self.client, sample=sample)
++            elif fn.endswith('.pkl'):
++                is_feat = True
++                frames = read_frames_pickle(fn, num_frames=max_num_frames, min_num_frames=min_num_frames,
++                                            client=self.client, sample=sample)
+             else:
+-                frames = read_frames_decord(fn, num_frames=max_num_frames, min_num_frames=min_num_frames,
++                frames = read_frames_decord(fn, max_num_frames=max_num_frames, min_num_frames=min_num_frames,
+                                             client=self.client, sample=sample, clip=clip)
+-            return frames
++            return frames, is_feat
+ 
+ 
+ def expand2square(pil_img, background_color):
+diff --git a/internvl_chat/internvl/train/internvl_chat_finetune.py b/internvl_chat/internvl/train/internvl_chat_finetune.py
+index 2ace5ea..6fa8413 100644
+--- a/internvl_chat/internvl/train/internvl_chat_finetune.py
++++ b/internvl_chat/internvl/train/internvl_chat_finetune.py
+@@ -3,6 +3,7 @@ import json
+ import logging
+ import math
+ import os
++import os.path as osp
+ import random
+ import sys
+ import traceback
+@@ -11,6 +12,7 @@ from copy import deepcopy
+ from dataclasses import dataclass, field
+ from typing import Dict, Optional
+ 
++import cv2
+ import numpy as np
+ import torch
+ import torch.distributed as dist
+@@ -141,6 +143,14 @@ class ModelArguments:
+         metadata={'help': 'Specify the version of pixel shuffle implementation. Default is `v1`.'
+                           'Please use `v2` to fix the bug of transposed image.'}
+     )
++    use_video_frames_compress: bool = field(
++        default=False,
++        metadata={'help': 'Compress the number of video frames from N to M.'}
++    )
++    num_video_query_token: int = field(
++        default=32,
++        metadata={'help': 'The number of compress video frames.'}
++    )
+ 
+ 
+ @dataclass
+@@ -196,6 +206,14 @@ class DataTrainingArguments:
+         default=12,
+         metadata={'help': 'The maximum number of dynamic patches. Default is 6.'},
+     )
++    min_num_frame: Optional[int] = field(
++        default=90,
++        metadata={'help': 'The minimum number of video frames. Default is 90.'},
++    )
++    max_num_frame: Optional[int] = field(
++        default=120,
++        metadata={'help': 'The maximum number of video frames. Default is 120.'},
++    )
+     normalize_type: Optional[str] = field(
+         default='imagenet',
+         metadata={'help': 'The normalize type for the image. Default is imagenet.'},
+@@ -224,6 +242,8 @@ class LazySupervisedDataset(Dataset):
+         min_num_frame=4,  # for video data
+         max_num_frame=12,  # for video data
+         sampling_method='rand',  # for video data
++        use_ffc=False,
++        query_num_linear=64, # for video query compress
+         repeat_time=1,
+         normalize_type='imagenet',
+         random_seed=0,
+@@ -233,7 +253,7 @@ class LazySupervisedDataset(Dataset):
+         self.tokenizer = tokenizer
+         self.template_name = template_name
+         self.num_image_token = num_image_token
+-        logger.info(f'[Dataset] num_image_token: {num_image_token}')
++        logger.info(f'[Dataset] num_image_token: {num_image_token}') # 256
+         logger.info(f'[Dataset] dynamic_image_size: {dynamic_image_size}')
+         logger.info(f'[Dataset] use_thumbnail: {use_thumbnail}')
+         logger.info(f'[Dataset] min_dynamic_patch: {min_dynamic_patch}, max_dynamic_patch: {max_dynamic_patch}')
+@@ -243,6 +263,8 @@ class LazySupervisedDataset(Dataset):
+         self.pad2square = pad2square
+         self.max_num_frame = max_num_frame
+         self.min_num_frame = min_num_frame
++        self.use_ffc = use_ffc
++        self.query_num_token = query_num_linear
+         self.sampling_method = sampling_method
+ 
+         logger.info('Formatting inputs...Skip in lazy mode')
+@@ -434,7 +456,7 @@ class LazySupervisedDataset(Dataset):
+ 
+         # Load the video frames using tcs_loader
+         # TODO: Load videos without using tcsloader.
+-        image_list = self.tcs_loader(
++        image_list, is_feat = self.tcs_loader(
+             video_path,
+             image_type='video',
+             max_num_frames=self.max_num_frame,
+@@ -447,15 +469,20 @@ class LazySupervisedDataset(Dataset):
+         data_item['conversations'][0]['value'] = data_item['conversations'][0]['value'].replace(
+             '<video>\n', special_tokens)
+ 
+-        # Transform each frame image and stack them into a tensor
+-        pixel_values = [transform(image) for image in image_list]
+-        pixel_values = torch.stack(pixel_values)
++        if is_feat:
++            pixel_values = torch.from_numpy(image_list)
++        else:
++            # Transform each frame image and stack them into a tensor
++            pixel_values = [transform(image) for image in image_list]
++            pixel_values = torch.stack(pixel_values)
+         num_patches = pixel_values.size(0)
+ 
+         # Select the appropriate preprocessing function based on the template name
+         preprocess_function = self.get_preprocess_function()
+ 
+         # Preprocess the conversations and generate the return dictionary
++        if self.use_ffc:
++            num_patches = self.query_num_token
+         num_image_tokens = [self.num_image_token] * num_patches
+         ret = preprocess_function(self.template_name, [deepcopy(data_item['conversations'])],
+                                   self.tokenizer, num_image_tokens, group_by_length=self.group_by_length,
+@@ -467,7 +494,7 @@ class LazySupervisedDataset(Dataset):
+             labels=ret['labels'][0],
+             attention_mask=ret['attention_mask'][0],
+             pixel_values=pixel_values,
+-            image_flags=torch.tensor([1] * num_patches, dtype=torch.long)
++            image_flags=torch.tensor(([1] * self.query_num_token) if self.use_ffc else ([1] * num_patches), dtype=torch.long)
+         )
+         return ret
+ 
+@@ -555,6 +582,10 @@ def build_datasets(
+     use_thumbnail=False,
+     min_dynamic_patch=1,
+     max_dynamic_patch=12,
++    min_num_frame=90,
++    max_num_frame=120,
++    use_ffc=False,
++    query_num_frame=64,
+     normalize_type='imagenet',
+ ):
+     datasets = []
+@@ -581,6 +612,10 @@ def build_datasets(
+             use_thumbnail=use_thumbnail,
+             min_dynamic_patch=min_dynamic_patch,
+             max_dynamic_patch=max_num,
++            min_num_frame=min_num_frame,
++            max_num_frame=max_num_frame,
++            use_ffc=use_ffc,
++            query_num_linear=query_num_frame,
+             repeat_time=repeat_time,
+             normalize_type=normalize_type,
+             random_seed=ds_idx,
+@@ -677,6 +712,10 @@ def main():
+         logger.info('Loading InternVLChatModel...')
+         config = InternVLChatConfig.from_pretrained(model_args.model_name_or_path)
+         config.vision_config.drop_path_rate = model_args.drop_path_rate
++        config.use_video_frames_compress = model_args.use_video_frames_compress
++        config.num_video_query_token = model_args.num_video_query_token
++        config.min_num_frame = data_args.min_num_frame
++        config.max_num_frame = data_args.max_num_frame
+         if config.llm_config.model_type == 'internlm2':
+             config.llm_config.attn_implementation = 'flash_attention_2'  # for InternLM
+             logger.info('Using flash_attention_2 for InternLM')
+@@ -717,7 +756,8 @@ def main():
+             pad2square=data_args.pad2square, template=data_args.conv_style,
+             select_layer=model_args.vision_select_layer, dynamic_image_size=data_args.dynamic_image_size,
+             use_thumbnail=data_args.use_thumbnail, ps_version=model_args.ps_version,
+-            min_dynamic_patch=data_args.min_dynamic_patch, max_dynamic_patch=data_args.max_dynamic_patch)
++            min_dynamic_patch=data_args.min_dynamic_patch, max_dynamic_patch=data_args.max_dynamic_patch,
++            min_num_frame=data_args.min_num_frame, max_num_frame=data_args.max_num_frame)
+         internvl_chat_config.force_image_size = data_args.force_image_size
+         logger.info('Building InternVLChatModel...')
+         model = InternVLChatModel(internvl_chat_config, vision_model, llm)
+@@ -766,6 +806,8 @@ def main():
+         data_args, tokenizer, tcs_loader, model, group_by_length=training_args.group_by_length,
+         dynamic_image_size=data_args.dynamic_image_size, use_thumbnail=data_args.use_thumbnail,
+         min_dynamic_patch=data_args.min_dynamic_patch, max_dynamic_patch=data_args.max_dynamic_patch,
++        min_num_frame=data_args.min_num_frame, max_num_frame=data_args.max_num_frame,
++        use_ffc=model_args.use_video_frames_compress, query_num_frame=model_args.num_video_query_token,
+         normalize_type=data_args.normalize_type)
+ 
+     def _freeze_params(module):
+diff --git a/internvl_chat/shell/internvl2.0/2nd_finetune/internvl2_1b_qwen2_0_5b_dynamic_res_2nd_finetune_lora.sh b/internvl_chat/shell/internvl2.0/2nd_finetune/internvl2_1b_qwen2_0_5b_dynamic_res_2nd_finetune_lora.sh
+index 38994e2..568f52d 100644
+--- a/internvl_chat/shell/internvl2.0/2nd_finetune/internvl2_1b_qwen2_0_5b_dynamic_res_2nd_finetune_lora.sh
++++ b/internvl_chat/shell/internvl2.0/2nd_finetune/internvl2_1b_qwen2_0_5b_dynamic_res_2nd_finetune_lora.sh
+@@ -32,8 +32,10 @@ torchrun \
+   --model_name_or_path "./pretrained/InternVL2-1B" \
+   --conv_style "Hermes-2" \
+   --output_dir ${OUTPUT_DIR} \
+-  --meta_path "./shell/data/internvl_1_2_finetune_custom.json" \
++  --meta_path "./shell/data/internvl_1_2_finetune_custom_video.json" \
+   --overwrite_output_dir True \
++  --min_num_frame 4 \
++  --max_num_frame 12 \
+   --force_image_size 448 \
+   --max_dynamic_patch 6 \
+   --down_sample_ratio 0.5 \
+-------Last commit-------
+commit 74126371d0190a316109ddb22e4f2ca4405a7991
+Author: zhe chen <wztxy89@163.com>
+Date:   Tue Sep 10 15:44:36 2024 +0800
+
+    Fix bugs in multi-image inference
+

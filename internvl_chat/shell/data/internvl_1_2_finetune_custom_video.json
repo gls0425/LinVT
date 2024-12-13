@@ -1,0 +1,9 @@
+{
+  "videochat2": {
+    "root": "/mnt/dolphinfs/ssd_pool/docker/user/hadoop-vacv/gaolishuai/video_dataset/LLaMA-VID/data/LLaMA-VID-Finetune",
+    "annotation": "/mnt/dolphinfs/ssd_pool/docker/user/hadoop-vacv/gaolishuai/video_dataset/LLaMA-VID/data/LLaMA-VID-Finetune/videochat2.jsonl",
+    "data_augment": false,
+    "repeat_time": 1,
+    "length": 232645
+  }
+}
