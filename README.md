@@ -3,9 +3,13 @@
 ## News
 [2024/12/09] 🔥 Our paper is coming! We release our paper on [Arxiv](https://arxiv.org/abs/2412.05185). Please refer to the paper for more details. 
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-activitynet)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-activitynet?p=linvt-empower-your-image-level-large-language)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zero-shot-video-question-answer-on-egoschema-1)](https://paperswithcode.com/sota/zero-shot-video-question-answer-on-egoschema-1?p=linvt-empower-your-image-level-large-language)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/video-question-answering-on-mvbench)](https://paperswithcode.com/sota/video-question-answering-on-mvbench?p=linvt-empower-your-image-level-large-language)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zero-shot-video-question-answer-on-egoschema-1)](https://paperswithcode.com/sota/zero-shot-video-question-answer-on-egoschema-1?p=linvt-empower-your-image-level-large-language)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/video-question-answering-on-next-qa)](https://paperswithcode.com/sota/video-question-answering-on-next-qa?p=linvt-empower-your-image-level-large-language)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-activitynet)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-activitynet?p=linvt-empower-your-image-level-large-language)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-msvd-qa)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-msvd-qa?p=linvt-empower-your-image-level-large-language)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-msrvtt-qa)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-msrvtt-qa?p=linvt-empower-your-image-level-large-language)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-tgif-qa)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-tgif-qa?p=linvt-empower-your-image-level-large-language)
 
 
 The other ranking lists are coming soon.
