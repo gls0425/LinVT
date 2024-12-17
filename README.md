@@ -41,3 +41,15 @@ comming soon.
 
 ## Training
 comming soon.
+
+## Citation
+If you find this repository useful, please consider giving a star ⭐ and citation:
+
+```
+@article{gao2024linvt,
+  title={LinVT: Empower Your Image-level Large Language Model to Understand Videos},
+  author={Gao, Lishuai and Zhong, Yujie and Zeng, Yingsen and Tan, Haoxian and Li, Dengjie and Zhao, Zheng},
+  journal={arXiv preprint arXiv:2412.05185},
+  year={2024}
+}
+```
