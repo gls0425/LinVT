@@ -14,8 +14,7 @@ Our method achieves the following rankings with only a 7B-size model:
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-tgif-qa)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-tgif-qa?p=linvt-empower-your-image-level-large-language)
 
 
-The other ranking lists are coming soon.
-
+## Model Architecture
 <p align="center">
  <img src="docs/network.jpg" width="100%">
 </p>
