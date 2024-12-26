@@ -13,6 +13,9 @@ Our method achieves the following rankings with only a 7B-size model:
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-msrvtt-qa)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-msrvtt-qa?p=linvt-empower-your-image-level-large-language)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-tgif-qa)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-tgif-qa?p=linvt-empower-your-image-level-large-language)
 
+## Leaderboards
+### MLVU
+<img src="docs/leaderboard_mlvu.png" alt="MLVU" width="200" height="340">
 
 ## Model Architecture
 <p align="center">
