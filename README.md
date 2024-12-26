@@ -14,6 +14,9 @@ Our method achieves the following rankings with only a 7B-size model:
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/linvt-empower-your-image-level-large-language/zeroshot-video-question-answer-on-tgif-qa)](https://paperswithcode.com/sota/zeroshot-video-question-answer-on-tgif-qa?p=linvt-empower-your-image-level-large-language)
 
 ## Leaderboards
+### VideoVista
+<img src="docs/leaderboard_videovista.png" alt="VideoVista" width="550" height="380">
+
 ### MLVU
 <img src="docs/leaderboard_mlvu.png" alt="MLVU" width="200" height="340">
 
