@@ -15,10 +15,10 @@ Our method achieves the following rankings with only a 7B-size model:
 
 ## Leaderboards
 ### VideoVista
-<img src="docs/leaderboard_videovista.png" alt="VideoVista" width="550" height="380">
+<img src="docs/leaderboard_videovista.png" alt="VideoVista" width="600" height="200">
 
 ### MLVU
-<img src="docs/leaderboard_mlvu.png" alt="MLVU" width="200" height="340">
+<img src="docs/leaderboard_mlvu.png" alt="MLVU" width="350" height="230">
 
 ## Model Architecture
 <p align="center">
