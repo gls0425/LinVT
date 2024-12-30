@@ -42,7 +42,7 @@ pip install -r requirements.txt
 comming soon.
 
 ## Inference
-comming soon.
+sh evaluate.sh [model_weight] [task_name] --dynamic
 
 ## Training
 comming soon.
